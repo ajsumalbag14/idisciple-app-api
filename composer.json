@@ -53,7 +53,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true,
-	"cache-dir": "/home/idiscipl/public_html/laravel/cache"
+	"cache-dir": "/home/idiscipl/public_html/API/cache"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
