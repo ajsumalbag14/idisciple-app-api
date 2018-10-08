@@ -1,5 +1,5 @@
 <?php
-header("refresh: 5; https://idisciple.ph/laravel/public/");
+header("refresh: 5; https://idisciple.ph/API/public/");
 
 	echo '<title>Laravel Installed</title><div style="background: #e9ffed; border: 1px solid #b0dab7; padding: 15px;" align="center" >
 	<font size="5" color="#182e7a">Laravel is installed successfully.</font><br /><br />

@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://idisciple.ph/laravel'),
+    'url' => env('APP_URL', 'https://idisciple.ph/API'),
 
     /*
     |--------------------------------------------------------------------------
@@ -104,7 +104,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY','o1myzdj08c3np47g3ctjt6ph0vrhwsbz'),
+    'key' => env('APP_KEY','k55nliquoh9ybleigr6q9yguqu3wkqef'),
 
     'cipher' => 'AES-256-CBC',
 
