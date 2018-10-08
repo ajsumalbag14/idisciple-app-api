@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'iDISCIPLE API'),
 
     /*
     |--------------------------------------------------------------------------
@@ -159,6 +159,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        # Module bootstrapper
+        App\Providers\ModuleServiceProvider::class,
 
     ],
 
