@@ -47,7 +47,7 @@ class AuthController extends Controller
         // process response
         if ($authResult['status'] == 1) {
             // if login is successful
-            $responseFormat = $this->authResponseFormatter->prepare($authResult['data']['user']);
+            $responseFormat = $this->authResponseFormatter->prepare($authResult['data']);
             $this->response = $this->responseFormatter->prepareSuccessResponseBody($responseFormat);
         } else if ($authResult['status'] == 2) {
             // if login credentials is invalid
