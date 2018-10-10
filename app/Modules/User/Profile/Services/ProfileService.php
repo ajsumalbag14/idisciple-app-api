@@ -24,7 +24,6 @@ class ProfileService implements ProfileServiceInterface
         $response = [];
 
         try {
-
             // check if email already exists
             if ($this->userObject::whereEmail($array['user']['email'])->first()) {
 
@@ -52,6 +51,32 @@ class ProfileService implements ProfileServiceInterface
                     ]
                 ];
             }
+
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $response = [
+                'status'    => 3,
+                'message'   => $ex->getMessage()
+            ];
+        }
+
+        return $response;
+    }
+
+    public function editPassword($array, $id)
+    {
+        $response = [];
+
+        try {
+            // update user
+            $this->userObject::whereUser_id($id)->update($array);
+            
+            // retrieve updated account
+            $user = $this->userObject::whereUser_id($id)->first();
+
+            $response = [
+                'status'    => 1,
+                'data'      => $user
+            ];
 
         } catch (\Illuminate\Database\QueryException $ex) {
             $response = [

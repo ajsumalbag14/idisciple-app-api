@@ -9,11 +9,12 @@ class ProfileResponseParser implements ProfileResponseParserInterface
     public function created($multiArray)
     {
         // api callback
-        $responseParam = [
+        $responseParam[] = [
             'user_access'   => [
                     'user_id'       => $multiArray['user']['user_id'],
                     'username'      => $multiArray['user']['email'],
                     'password'      => $multiArray['user']['password'],
+                    'api_token'     => $multiArray['user']['token'],
                     'fcm_token'     => $multiArray['user']['fcm_token']
             ],
             'profile'       => [
@@ -28,6 +29,19 @@ class ProfileResponseParser implements ProfileResponseParserInterface
                     'is_pwd'        => $multiArray['profile']['is_pwd'],
                     'created_at'    => $multiArray['profile']['created_at']
             ]   
+        ];
+
+        return $responseParam;
+    }
+
+    public function updatedPassword($array)
+    {
+        // api callback
+        $responseParam = [
+            'user_id'       => $array['user_id'],
+            'username'      => $array['email'],
+            'api_token'     => $array['token'],
+            'fcm_token'     => $array['fcm_token']
         ];
 
         return $responseParam;

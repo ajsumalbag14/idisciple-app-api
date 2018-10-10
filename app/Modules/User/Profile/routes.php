@@ -6,4 +6,7 @@ Route::group(['namespace' => 'App\Modules\User\Profile\Controllers', 'prefix' =>
     Route::post('/edit', 'UserProfileController@editUser');
     Route::post('/delete', 'UserProfileController@deleteUser');
 
+    Route::put('/first-time/{id}', 'UserProfileController@changePassword');
+    Route::put('/password/{id}', 'UserProfileController@changePassword');
+
 });

@@ -7,5 +7,6 @@ use Illuminate\Http\Request;
 interface ProfileRequestParserInterface
 {
     public function create(Request $request);
+    public function newPassword(Request $request);
     public function update(Request $request);
 }

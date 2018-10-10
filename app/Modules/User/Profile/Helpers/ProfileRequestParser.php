@@ -68,6 +68,38 @@ class ProfileRequestParser implements ProfileRequestParserInterface
 
     }
 
+    public function newPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), 
+            [
+                'new_password'      => 'required|string:max=100'
+            ]
+        );
+
+        if ($validator->fails()) {
+            $response = [
+                'status'    => 2,
+                'message'   => 'Invalid input.'
+            ];
+        } else {
+            $param = [
+                'password'          => Hash::make($request->get('new_password')),
+                'first_time_user'   => 1,
+                'temp_password'     => null,
+                'updated_at'        => Carbon::now()
+            ];
+
+            $response = [
+                'status'    => 1,
+                'data'      => $param
+            ];
+        }
+        
+
+        return $response;
+    }
+
+    
     public function update(Request $request)
     {
         //

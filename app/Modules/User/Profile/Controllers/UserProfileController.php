@@ -63,6 +63,26 @@ class UserProfileController extends Controller
 
     }
 
+    public function changePassword(Request $request, $user_id)
+    {
+        $paramParser = $this->requestParser->newPassword($request);
+        if ($paramParser['status'] == 1) {
+            $user_account = $this->service->editPassword($paramParser['data'], $user_id);
+            if ($user_account['status'] == 1) {
+                $responseFormat = $this->responseParser->updatedPassword($user_account['data']);
+                $this->response = $this->responseFormatter->prepareSuccessResponseBody($responseFormat);
+            } else {
+                // error saving resource
+                \Log::debug($user_account['message']); 
+                $this->response = $this->responseFormatter->prepareErrorResponseBody($user_account['message']);
+            }
+        } else {
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($paramParser['message']);
+        }
+        
+        return Response::json($this->response, $this->response['code']);
+    }
+
     public function editUser(Request $request, $user_id)
     {
         //
