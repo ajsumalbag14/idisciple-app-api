@@ -3,7 +3,8 @@
 return [
     'modules'   => [
         'User' => [
-            'Auth'
+            'Auth',
+            'Profile'
         ],
     ]
 ];

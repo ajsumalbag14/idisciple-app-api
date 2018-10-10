@@ -165,6 +165,7 @@ return [
         
         # Modules Service Providers
         App\Modules\User\Auth\Providers\AuthenticationServiceProvider::class,
+        App\Modules\User\Profile\Providers\UserProfileServiceProvider::class,
 
     ],
 
