@@ -2,47 +2,61 @@
 
 namespace App\Modules\User\Auth\Controllers;
 
+use Response;
+
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Modules\User\Auth\Models\User;
 
-class AuthController extends Controller {
+use App\Contracts\ResponseFormatterInterface;
 
-    protected $module = "Auth";
+use App\Modules\User\Auth\Contracts\AuthCredentialsInterface;
+use App\Modules\User\Auth\Contracts\AuthResponseFormatterInterface;
 
-    private $_test;
-    private $_repoUser;
+class AuthController extends Controller 
+{
+    protected $response;
 
-    public function __construct(User $user) 
+    protected $responseFormatter;
+
+    protected $authCredentials;
+
+    protected $authResponseFormatter;
+
+    public function __construct(
+        ResponseFormatterInterface $responseFormatter,
+        AuthResponseFormatterInterface $authResponseFormat,
+        AuthCredentialsInterface $authCred
+    ) 
     {
-        $this->_test = 'Arvin Test';
-        $this->_repoUser = $user;         
+        $this->responseFormatter        = $responseFormatter;
+        $this->authResponseFormatter    = $authResponseFormat;
+        $this->authCredentials          = $authCred;
     }
 
-    public function test()
+    /**
+     * Verify user login credential.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function handle(Request $request)
     {
-        return response()->json([
-            'name' => $this->_test,
-            'state' => 'Success'
-        ], 200);
-    }
+        // verify login credentials
+        $authResult = $this->authCredentials->verify($request);
 
-    public function testDB()
-    {
-        //select user table
-        try {
-            $resource = $this->_repoUser::find(1);
-
-            return response()->json([
-                'DB connection state'   => 'Success',
-                'Name'                  => $resource->name,
-                'Timestamp'             => $resource->created_at
-            ], 200);
-        } catch (\Illuminate\Database\QueryException $ex) { 
-            return response()->json([
-                'code'      => 500,
-                'status'    => 'ER000',
-                'message'   => $ex
-            ], 500);
+        // process response
+        if ($authResult['status'] == 1) {
+            // if login is successful
+            $responseFormat = $this->authResponseFormatter->prepare($authResult['data']['user']);
+            $this->response = $this->responseFormatter->prepareSuccessResponseBody($responseFormat);
+        } else if ($authResult['status'] == 2) {
+            // if login credentials is invalid
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($authResult['message']);
+        } else {
+            // if login is unsuccessful
+            $this->response = $this->responseFormatter->prepareErrorResponseBody($authResult['message']);
         }
+
+        return Response::json($this->response, $this->response['code']);
     }
 }

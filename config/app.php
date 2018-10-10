@@ -160,8 +160,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        # Module bootstrapper
+        # Module Bootstrapper
         App\Providers\ModuleServiceProvider::class,
+        
+        # Modules Service Providers
+        App\Modules\User\Auth\Providers\AuthenticationServiceProvider::class,
 
     ],
 

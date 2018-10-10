@@ -2,7 +2,6 @@
 
 Route::group(['namespace' => 'App\Modules\User\Auth\Controllers', 'prefix' => 'auth'], function () {
     
-    Route::get('/test', 'AuthController@test');
-    Route::get('/testDB', 'AuthController@testDB');
+    Route::post('/login', 'AuthController@handle');
 
 });
