@@ -45,11 +45,13 @@ class ProfileRequestParser implements ProfileRequestParserInterface
                 'created_at'    => Carbon::now()
             ];
 
+            $temp_password = str_random(20); // 20 alpha numeric characters
+
             $user_param = [
                 'name'          => $request->get('firstname').' '.$request->get('lastname'),
                 'email'         => $request->get('email'),
-                'password'      => str_random(20),
-                'temp_password' => Hash::make(str_random(20)),
+                'password'      => $temp_password,
+                'temp_password' => Hash::make($temp_password),
                 'is_active'     => 1,
                 'created_at'    => Carbon::now()
             ];
