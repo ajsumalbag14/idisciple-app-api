@@ -1,5 +1,10 @@
 <?php
-
+/** 
+ * @author Arvin Jay Sumalbag <ajsumalbag14@gmail.com>
+ * VS Code
+ * PHP Version 7.2.1
+ * 2018-10-11 12:38
+ */
 namespace App\Modules\User\Profile\Controllers;
 
 use Response;
@@ -42,9 +47,11 @@ class UserProfileController extends Controller
 
     public function addUser(Request $request)
     {
-        $paramParser = $this->requestParser->create($request);
-        if ($paramParser['status'] == 1) {
-            $user_account = $this->service->add($paramParser['data']);
+        $this->requestParser->setAddUserParam($request);
+        $parsedParam = $this->requestParser->getParsedParameters();
+        
+        if ($parsedParam['status'] == 1) {
+            $user_account = $this->service->add($parsedParam['data']);
             if ($user_account['status'] == 1) {
                 $responseFormat = $this->responseParser->created($user_account['data']);
                 $this->response = $this->responseFormatter->prepareSuccessResponseBody($responseFormat);
@@ -56,7 +63,7 @@ class UserProfileController extends Controller
                 $this->response = $this->responseFormatter->prepareErrorResponseBody($user_account['message']);
             }
         } else {
-            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($paramParser['message']);
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($parsedParam['message']);
         }
         
         return Response::json($this->response, $this->response['code']);
@@ -65,9 +72,10 @@ class UserProfileController extends Controller
 
     public function changePassword(Request $request, $user_id)
     {
-        $paramParser = $this->requestParser->newPassword($request);
-        if ($paramParser['status'] == 1) {
-            $user_account = $this->service->editPassword($paramParser['data'], $user_id);
+        $this->requestParser->setUpdatePasswordParam($request);
+        $parsedParam = $this->requestParser->getParsedParameters();
+        if ($parsedParam['status'] == 1) {
+            $user_account = $this->service->editWithUserId($parsedParam['data'], $user_id);
             if ($user_account['status'] == 1) {
                 $responseFormat = $this->responseParser->updatedPassword($user_account['data']);
                 $this->response = $this->responseFormatter->prepareSuccessResponseBody($responseFormat);
@@ -77,7 +85,31 @@ class UserProfileController extends Controller
                 $this->response = $this->responseFormatter->prepareErrorResponseBody($user_account['message']);
             }
         } else {
-            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($paramParser['message']);
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($parsedParam['message']);
+        }
+        
+        return Response::json($this->response, $this->response['code']);
+    }
+
+    public function resetPasswordAndSendEmail(Request $request)
+    {
+        $this->requestParser->setValidateEmailParam($request);
+        $parsedParam = $this->requestParser->getParsedParameters();
+        
+        if ($parsedParam['status'] == 1) {
+            $user_account = $this->service->editWithEmail($parsedParam['data'], $request->get('email'));
+            if ($user_account['status'] == 1) {
+                // send email
+                
+
+                $this->response = $this->responseFormatter->prepareSuccessResponseBody([]);
+            } else {
+                // error saving resource
+                \Log::debug($user_account['message']); 
+                $this->response = $this->responseFormatter->prepareErrorResponseBody($user_account['message']);
+            }
+        } else {
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($parsedParam['message']);
         }
         
         return Response::json($this->response, $this->response['code']);

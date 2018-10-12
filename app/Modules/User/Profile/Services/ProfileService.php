@@ -1,5 +1,10 @@
 <?php
-
+/** 
+ * @author Arvin Jay Sumalbag <ajsumalbag14@gmail.com>
+ * VS Code
+ * PHP Version 7.2.1
+ * 2018-10-11 12:51
+ */
 namespace App\Modules\User\Profile\Services;
 
 use App\Modules\User\Profile\Models\User;
@@ -62,16 +67,16 @@ class ProfileService implements ProfileServiceInterface
         return $response;
     }
 
-    public function editPassword($array, $id)
+    public function editWithUserId($array, $user_id)
     {
         $response = [];
 
         try {
             // update user
-            $this->userObject::whereUser_id($id)->update($array);
+            $this->userObject::whereUser_id($user_id)->update($array);
             
             // retrieve updated account
-            $user = $this->userObject::whereUser_id($id)->first();
+            $user = $this->userObject::whereUser_id($user_id)->first();
 
             $response = [
                 'status'    => 1,
@@ -88,9 +93,30 @@ class ProfileService implements ProfileServiceInterface
         return $response;
     }
 
-    public function edit($array, $user_id)
+    public function editWithEmail($array, $email)
     {
-        //
+        $response = [];
+
+        try {
+            // update user
+            $this->userObject::whereEmail($email)->update($array);
+            
+            // retrieve updated account
+            $user = $this->userObject::whereEmail($email)->first();
+
+            $response = [
+                'status'    => 1,
+                'data'      => $user
+            ];
+
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $response = [
+                'status'    => 3,
+                'message'   => $ex->getMessage()
+            ];
+        }
+
+        return $response;
     }
 
     public function delete($user_id)

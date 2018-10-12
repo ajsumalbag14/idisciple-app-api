@@ -8,5 +8,6 @@ Route::group(['namespace' => 'App\Modules\User\Profile\Controllers', 'prefix' =>
 
     Route::put('/first-time/{id}', 'UserProfileController@changePassword');
     Route::put('/password/{id}', 'UserProfileController@changePassword');
+    Route::post('/reset-password', 'UserProfileController@resetPasswordAndSendEmail');
 
 });
