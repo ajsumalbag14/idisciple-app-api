@@ -6,5 +6,8 @@ return [
             'Auth',
             'Profile'
         ],
+        'Contents' => [
+            'Main'
+        ]
     ]
 ];
