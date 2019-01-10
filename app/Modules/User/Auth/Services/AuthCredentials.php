@@ -93,9 +93,28 @@ class AuthCredentials implements AuthCredentialsInterface
         //load user profile
         $profile = $this->profileObject->whereUser_id($user_id)->first();
 
+        //load conference details
+        $tshirt = array("XS", "S", "M", "L", "XL", "2XL", "3XL");
+
+        $device = array("Android", "iOS");
+
+        $tour = array("Yes", "No");
+
+        $details = [
+            'workshop_id_1'     => rand(1, 10),
+            'workshop_id_2'     => rand(1, 10),
+            'family_group_id'   => rand(1, 10),
+            'tshirt_size'       => $tshirt[rand(0, 6)],
+            'device'            => $device[rand(0, 1)],
+            'city_tour'         => $tour[rand(0, 1)],
+            'room_number'       => 'Room '.rand(1, 100)
+
+        ];
+
         $this->sessionAssets = [
             'user'      => $user,
-            'profile'   => $profile
+            'profile'   => $profile,
+            'event'     => $details
         ];
 
     }

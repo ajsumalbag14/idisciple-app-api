@@ -28,7 +28,8 @@ class AuthResponseFormatter implements AuthResponseFormatterInterface
 				'is_pwd'        	=> $objectData['profile']['is_pwd'],
 				'created_at'    	=> $objectData['profile']['created_at'],
 				'updated_at'    	=> $objectData['profile']['updated_at']
-			]
+			],
+			'event_details'	=> $objectData['event']
 		];
 
 		return $responseFormat;
