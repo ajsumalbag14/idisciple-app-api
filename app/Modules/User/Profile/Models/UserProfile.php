@@ -39,7 +39,7 @@ class UserProfile extends Model
         'user_id', 'firstname', 'lastname', 'middlename', 'nickname', 'gender',
         'birthdate', 'mobile_no', 'country', 'is_pwd', 'created_at', 'updated_at',
         'workshop_id_1', 'workshop_id_2', 'family_group_id', 'tshirt_size',
-        'device', 'city_tour', 'room_number'
+        'device', 'city_tour', 'room_number', 'img_name', 'img_path'
     ];
 
 }

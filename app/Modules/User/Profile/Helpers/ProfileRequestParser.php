@@ -75,7 +75,9 @@ class ProfileRequestParser implements ProfileRequestParserInterface
             'tshirt_size'       => 'string',
             'device'            => 'string',
             'city_tour'         => 'string',
-            'room_number'       => 'integer'
+            'room_number'       => 'integer',
+            'img_path'          => 'string',
+            'img_name'          => 'string'
         ]; 
         
         if ($this->validator->validateRequest($request, $filter)->fails()) {
@@ -99,7 +101,9 @@ class ProfileRequestParser implements ProfileRequestParserInterface
                 'device'            => $request->get('device'),
                 'city_tour'         => $request->get('city_tour'),
                 'room_number'       => $request->get('room_number'),
-                'created_at'    => $this->current_date
+                'img_name'          => $request->get('img_name'),
+                'img_path'          => $request->get('img_path'),
+                'created_at'        => $this->current_date
             ];
 
             $user_param = [

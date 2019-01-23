@@ -36,7 +36,9 @@ class ProfileResponseParser implements ProfileResponseParserInterface
                     'tshirt_size'       => $multiArray['profile']['tshirt_size'],
                     'device'            => $multiArray['profile']['device'],
                     'city_tour'         => $multiArray['profile']['city_tour'],
-                    'room_number'       => $multiArray['profile']['room_number']
+                    'room_number'       => $multiArray['profile']['room_number'],
+                    'img_name'          => $multiArray['profile']['img_name'],
+                    'img_path'          => $multiArray['profile']['img_path']
             ]   
         ];
 
