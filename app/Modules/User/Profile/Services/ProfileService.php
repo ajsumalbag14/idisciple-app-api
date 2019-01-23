@@ -119,6 +119,31 @@ class ProfileService implements ProfileServiceInterface
         return $response;
     }
 
+    public function getAllUsers()
+    {
+        $response = [];
+
+        try {
+            // get all users
+            $profile    = $this->profileObject::all();
+            
+            $response = [
+                'status'    => 1,
+                'data'      => [
+                    'profile'   => $profile
+                ]
+            ];
+
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $response = [
+                'status'    => 3,
+                'message'   => $ex->getMessage()
+            ];
+        }
+
+        return $response;
+    }
+
     public function delete($user_id)
     {
         //

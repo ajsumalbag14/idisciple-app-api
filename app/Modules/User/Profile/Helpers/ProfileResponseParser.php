@@ -45,6 +45,72 @@ class ProfileResponseParser implements ProfileResponseParserInterface
         return $responseParam;
     }
 
+    public function allUsers($multiArray)
+    {
+        $responseParam = [];
+        $pathFile = ENV('ASSETS_PATH_URL');
+        $pathFileHeader = $pathFile.'/profile_header.json';
+        $pathFileFooter = $pathFile.'/footer.json';
+        $pathFileBody = $pathFile.'/profile_body.json';
+        if (file_exists($pathFileBody)) {
+            unlink($pathFileBody);
+        }
+        $pathFileResult = $pathFile.'/profile.json';
+
+        // api callback
+        foreach ($multiArray['profile'] as $val) {
+            
+            $responseParam[] = [
+                'id'                =>  $val['user_id'],
+                'name'              =>  $val['firstname'].' '.$val['lastname'],
+                'nickname'          =>  $val['nickname'],
+                'firstname'         =>  $val['firstname'],
+                'middlename'        =>  $val['middlename'],
+                'lastname'          =>  $val['lastname'],
+                'gender'            =>  $val['gender'],
+                'country'           =>  $val['country'],
+                'fg_id'             =>  $val['family_group_id'],
+                'workshop_number_1' =>  $val['workshop_id_1'],
+                'workshop_number_2' =>  $val['workshop_id_2'],
+                'img_path'          =>  $val['img_path'],
+                'img_name'          =>  $val['img_name'] 
+            ];
+
+            $data = [
+                'id'                =>  $val['user_id'],
+                'name'              =>  $val['firstname'].' '.$val['lastname'],
+                'nickname'          =>  $val['nickname'],
+                'firstname'         =>  $val['firstname'],
+                'middlename'        =>  $val['middlename'],
+                'lastname'          =>  $val['lastname'],
+                'gender'            =>  $val['gender'],
+                'country'           =>  $val['country'],
+                'fg_id'             =>  $val['family_group_id'],
+                'workshop_number_1' =>  $val['workshop_id_1'],
+                'workshop_number_2' =>  $val['workshop_id_2'],
+                'img_path'          =>  $val['img_path'],
+                'img_name'          =>  $val['img_name'] 
+            ];
+
+            if (file_exists($pathFileBody)) {
+                file_put_contents($pathFileBody, ','.json_encode($data), FILE_APPEND);
+            } else {
+                file_put_contents($pathFileBody, json_encode($data));
+            }
+        }
+
+        // create json file
+        if (file_exists($pathFileResult)) {
+            unlink($pathFileResult);
+        }
+        file_put_contents($pathFileResult, file_get_contents($pathFileHeader));
+        file_put_contents($pathFileResult, file_get_contents($pathFileBody), FILE_APPEND);
+        file_put_contents($pathFileResult, file_get_contents($pathFileFooter), FILE_APPEND);
+        // end create
+
+        return $responseParam;
+    }
+
     public function updatedPassword($array)
     {
         // api callback

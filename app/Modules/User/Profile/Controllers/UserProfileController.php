@@ -115,6 +115,19 @@ class UserProfileController extends Controller
         return Response::json($this->response, $this->response['code']);
     }
 
+    public function fetchAll()
+    {
+        $parsedParam = $this->service->getAllUsers();
+        if ($parsedParam['status'] == 1) {
+            $responseFormat = $this->responseParser->allUsers($parsedParam['data']);
+            $this->response = $this->responseFormatter->prepareSuccessResponseBody($responseFormat);
+        } else {
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($parsedParam['message']);
+        }
+
+        return Response::json($this->response, $this->response['code']);
+    }
+
     public function editUser(Request $request, $user_id)
     {
         //
