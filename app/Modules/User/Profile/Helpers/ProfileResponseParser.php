@@ -124,8 +124,34 @@ class ProfileResponseParser implements ProfileResponseParserInterface
         return $responseParam;
     }
 
-    public function updated($multiArray)
+    public function updated($array)
     {
-        //
+        // api callback
+        $responseParam = [
+            'profile'       => [
+                    'firstname'     => $array['firstname'],
+                    'lastname'      => $array['lastname'],
+                    'middlename'    => $array['middlename'],
+                    'nickname'      => $array['nickname'],
+                    'mobile_no'     => $array['mobile_no'],
+                    'birthdate'     => $array['birthdate'],
+                    'gender'        => $array['gender'],
+                    'country'       => $array['country'],
+                    'updated_at'    => $array['created_at']
+            ],
+            'event_details'       => [
+                    'workshop_id_1'     => $array['workshop_id_1'],
+                    'workshop_id_2'     => $array['workshop_id_2'],
+                    'family_group_id'   => $array['family_group_id'],
+                    'tshirt_size'       => $array['tshirt_size'],
+                    'device'            => $array['device'],
+                    'city_tour'         => $array['city_tour'],
+                    'room_number'       => $array['room_number'],
+                    'img_name'          => $array['img_name'],
+                    'img_path'          => $array['img_path']
+            ]   
+        ];
+
+        return $responseParam;
     }
 }

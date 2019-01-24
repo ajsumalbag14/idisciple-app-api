@@ -27,6 +27,8 @@ class ProfileRequestParser implements ProfileRequestParserInterface
 
     protected $isValidRequest = true;
 
+    protected $validatorErrorMsg;
+
     public $resultArray = [];
 
     public function __construct(RequestValidatorInterface $validator)
@@ -48,7 +50,7 @@ class ProfileRequestParser implements ProfileRequestParserInterface
         } else {
             $result = [
                 'status'    => 2,
-                'message'   => 'Invalid input'
+                'message'   => $this->validatorErrorMsg //'Invalid input'
             ];
         }   
 
@@ -81,6 +83,8 @@ class ProfileRequestParser implements ProfileRequestParserInterface
         ]; 
         
         if ($this->validator->validateRequest($request, $filter)->fails()) {
+            $msg = $this->validator->validateRequest($request, $filter)->errors();
+            $this->validatorErrorMsg = $msg->first();
             $this->isValidRequest = false;
         } else {
             // exact resource array parameters to be sent to database
@@ -132,6 +136,8 @@ class ProfileRequestParser implements ProfileRequestParserInterface
         ];
 
         if ($this->validator->validateRequest($request, $filter)->fails()) {
+            $msg = $this->validator->validateRequest($request, $filter)->errors();
+            $this->validatorErrorMsg = $msg->first();
             $this->isValidRequest = false;
         } else {
             // prepare resource parameters to be sent to database
@@ -154,6 +160,8 @@ class ProfileRequestParser implements ProfileRequestParserInterface
         ];
 
         if ($this->validator->validateRequest($request, $filter)->fails()) {
+            $msg = $this->validator->validateRequest($request, $filter)->errors();
+            $this->validatorErrorMsg = $msg->first();
             $this->isValidRequest = false;
         } else {
             // prepare resource parameters to be sent to database
@@ -171,6 +179,59 @@ class ProfileRequestParser implements ProfileRequestParserInterface
     
     public function setUpdateProfileParam(Request $request)
     {
-        //
+        $param = [];
+        $filter = [
+            'firstname'         => 'required|string:max=50',
+            'lastname'          => 'required|string:max=50',
+            'middlename'        => 'string:max=50',
+            'nickname'          => 'string:max=50',
+            'mobile_no'         => 'required|string:max=13',
+            'birthdate'         => 'required|string',
+            'gender'            => 'required|string',
+            'country'           => 'required|string',
+            'workshop_id_1'     => 'integer',
+            'workshop_id_2'     => 'integer',
+            'family_group_id'   => 'integer',
+            'tshirt_size'       => 'string',
+            'device'            => 'string',
+            'city_tour'         => 'string',
+            'room_number'       => 'integer',
+            'img_path'          => 'string',
+            'img_name'          => 'string'
+        ]; 
+        
+        if ($this->validator->validateRequest($request, $filter)->fails()) {
+            $msg = $this->validator->validateRequest($request, $filter)->errors();
+            $this->validatorErrorMsg = $msg->first();
+            $this->isValidRequest = false;
+        } else {
+            // exact resource array parameters to be sent to database
+            $profile_param = [
+                'firstname'         => $request->get('firstname'),
+                'lastname'          => $request->get('lastname'),
+                'middlename'        => $request->get('middlename'),
+                'nickname'          => $request->get('nickname'),
+                'mobile_no'         => $request->get('mobile_no'),
+                'birthdate'         => $request->get('birthdate'),
+                'gender'            => $request->get('gender'),
+                'country'           => $request->get('country'),
+                'workshop_id_1'     => $request->get('workshop_id_1'),
+                'workshop_id_2'     => $request->get('workshop_id_2'),
+                'family_group_id'   => $request->get('family_group_id'),
+                'tshirt_size'       => $request->get('tshirt_size'),
+                'device'            => $request->get('device'),
+                'city_tour'         => $request->get('city_tour'),
+                'room_number'       => $request->get('room_number'),
+                'img_name'          => $request->get('img_name'),
+                'img_path'          => $request->get('img_path'),
+                'updated_at'        => $this->current_date
+            ];
+
+            $param = [
+                'profile'   => $profile_param                   
+            ];
+        }
+
+        $this->setResultArray($param);
     }
 }

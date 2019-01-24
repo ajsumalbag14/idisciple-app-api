@@ -130,7 +130,22 @@ class UserProfileController extends Controller
 
     public function editUser(Request $request, $user_id)
     {
-        //
+        $this->requestParser->setUpdateProfileParam($request);
+        $parsedParam = $this->requestParser->getParsedParameters();
+        if ($parsedParam['status'] == 1) {
+            $user_profile = $this->service->editUserViaUserId($parsedParam['data'], $user_id);
+            if ($user_profile['status'] == 1) {
+                $responseFormat = $this->responseParser->updated($user_profile['data']);
+                $this->response = $this->responseFormatter->prepareSuccessResponseBody($responseFormat);
+            } else {
+                // error saving resource
+                $this->response = $this->responseFormatter->prepareErrorResponseBody($user_profile['message']);
+            }
+        } else {
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($parsedParam['message']);
+        }
+        
+        return Response::json($this->response, $this->response['code']);
     }
 
     public function deleteUser($user_id)
