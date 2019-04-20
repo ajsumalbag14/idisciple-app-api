@@ -12,4 +12,6 @@ Route::group(['namespace' => 'App\Modules\User\Profile\Controllers', 'prefix' =>
 
     Route::get('/all', 'UserProfileController@fetchAll');
 
+    Route::get('/logout', 'UserProfileController@logout');
+
 });

@@ -12,5 +12,5 @@ interface ProfileServiceInterface
     public function add($array);
     public function editWithUserId($array, $user_id);
     public function editWithEmail($array, $email);
-    public function delete($user_id);
+    public function logout($user_id);
 }

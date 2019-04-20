@@ -7,7 +7,10 @@
  */
 namespace App\Modules\User\Profile\Services;
 
+use Carbon\Carbon;
+
 use App\Modules\User\Profile\Models\User;
+
 use App\Modules\User\Profile\Models\UserProfile;
 
 use App\Modules\User\Profile\Contracts\ProfileServiceInterface;
@@ -18,8 +21,11 @@ class ProfileService implements ProfileServiceInterface
 
     protected $profileObject;
 
+    protected $currentDate;
+
     public function __construct() 
     {
+        $this->currentDate      = Carbon::now();
         $this->userObject       = new User;
         $this->profileObject    = new UserProfile;
     }
@@ -177,8 +183,39 @@ class ProfileService implements ProfileServiceInterface
         return $response;
     }
 
-    public function delete($user_id)
+    public function logout($user_id)
     {
-        //
+        $response = [];
+
+        try {
+            $params = [
+                'token'             => null,
+                'token_expiry'      => null,
+                'updated_at'        => $this->currentDate,
+                'logout_datetime'   => $this->currentDate
+            ];
+
+            // update profile
+            $update = $this->userObject::whereUser_id($user_id)->update($params);
+
+            if ($update) {
+                $response = [
+                    'status'    => 1
+                ];
+            } else {
+                $response = [
+                    'status'    => 3,
+                    'message'   => 'User not found'
+                ];
+            }
+
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $response = [
+                'status'    => 3,
+                'message'   => $ex->getMessage()
+            ];
+        }
+
+        return $response;
     }
 }

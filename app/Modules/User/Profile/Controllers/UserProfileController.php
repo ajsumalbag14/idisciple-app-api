@@ -148,9 +148,21 @@ class UserProfileController extends Controller
         return Response::json($this->response, $this->response['code']);
     }
 
-    public function deleteUser($user_id)
+    public function logout(Request $request)
     {
-        //
+        $user_id = $request->get('user_id');
+        $service = $this->service->logout($user_id);
+        if ($service['status'] == 1) {
+            $this->response = [
+                'code'      => 200,
+                'status'    => 'Success',
+                'message'   => 'User has successfully logout.'
+            ];
+        } else {
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($service['message']);
+        }
+
+        return Response::json($this->response, $this->response['code']);
     }
 
 }
