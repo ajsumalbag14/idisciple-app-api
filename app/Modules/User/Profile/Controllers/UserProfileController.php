@@ -102,7 +102,7 @@ class UserProfileController extends Controller
                 // send email
                 
 
-                $this->response = $this->responseFormatter->prepareSuccessResponseBody([]);
+                $this->response = $this->responseFormatter->prepareSuccessResponseBody($user_account['data']);
             } else {
                 // error saving resource
                 \Log::debug($user_account['message']); 

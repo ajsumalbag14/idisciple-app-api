@@ -105,14 +105,22 @@ class ProfileService implements ProfileServiceInterface
 
         try {
             // update user
-            $this->userObject::whereEmail($email)->update($array);
-            
+            $user = $this->userObject::whereEmail($email)->first();
+            if (!$user) {
+                return [
+                    'status'    => 2,
+                    'message'   => 'User not found'
+                ];
+            }
+
+            $user->update($array);
+
             // retrieve updated account
             $user = $this->userObject::whereEmail($email)->first();
 
             $response = [
                 'status'    => 1,
-                'data'      => $user
+                'data'      => $user->toArray()
             ];
 
         } catch (\Illuminate\Database\QueryException $ex) {

@@ -48,7 +48,7 @@ class User extends Model
      * @var array
      */
     protected $hidden = [
-        'password', 'temp_password',
+        'password',
     ];
 
 }
