@@ -11,9 +11,13 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Mail;
+
 use App\Modules\User\Profile\Models\User;
 
 use App\Modules\User\Profile\Models\UserProfile;
+
+use App\Modules\User\Profile\Services\SendMailService;
 
 use App\Modules\User\Profile\Contracts\ProfileServiceInterface;
 
@@ -25,8 +29,11 @@ class ProfileService implements ProfileServiceInterface
 
     protected $currentDate;
 
-    public function __construct() 
+    protected $sendMail;
+
+    public function __construct(SendMailService $sendMail) 
     {
+        $this->sendMail         = $sendMail;
         $this->currentDate      = Carbon::now();
         $this->userObject       = new User;
         $this->profileObject    = new UserProfile;
@@ -119,6 +126,21 @@ class ProfileService implements ProfileServiceInterface
 
             // retrieve updated account
             $user = $this->userObject::whereEmail($email)->first();
+
+            // send email
+            $data = [
+                'name'      => $user->name,
+                'password'  => $user->hint,
+                'email'     => $user->email
+            ];
+	
+            Mail::send('resetmail', $data, 
+                function ($message) {
+                    $message->to('asumalbag@yondu.com')
+                        ->subject('iDISCIPLE APP');
+                }
+            );
+            //$this->sendMail->handle($user);
 
             $response = [
                 'status'    => 1,

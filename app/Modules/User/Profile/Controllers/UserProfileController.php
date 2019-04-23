@@ -99,9 +99,6 @@ class UserProfileController extends Controller
         if ($parsedParam['status'] == 1) {
             $user_account = $this->service->editWithEmail($parsedParam['data'], $request->get('email'));
             if ($user_account['status'] == 1) {
-                // send email
-                
-
                 $this->response = $this->responseFormatter->prepareSuccessResponseBody($user_account['data']);
             } else {
                 // error saving resource
