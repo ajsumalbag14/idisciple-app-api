@@ -16,7 +16,6 @@
                 background-color: #fff;
                 color: #636b6f;
                 font-family: 'Raleway', sans-serif;
-                font-weight: 100;
                 height: 100vh;
                 margin: 0;
             }
@@ -52,7 +51,6 @@
                 color: #636b6f;
                 padding: 0 25px;
                 font-size: 12px;
-                font-weight: 600;
                 letter-spacing: .1rem;
                 text-decoration: none;
                 text-transform: uppercase;
@@ -66,11 +64,15 @@
     <body>
         <div class="flex-center position-ref full-height">
             <div class="content">
-                <h3>Hi {{ $name }}, </h3>
-                <h3>Here is your new app access code:</h3>
-                <div class="title m-b-md">
-                    {{ $password }}
-                </div>
+                <p>
+                    Hi <b>{{ $user->name }}</b>,
+                    <br><br>
+                    
+                    Here is your new app password: <b>{{ $user->hint }}</b> 
+
+                    <br><br><br>
+                    iDISCIPLE Ph
+                </p>
             </div>
         </div>
     </body>

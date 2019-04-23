@@ -9,6 +9,8 @@ namespace App\Modules\User\Profile\Services;
 
 use Carbon\Carbon;
 
+use App\Mail\ResetPassword;
+
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Mail;
@@ -133,13 +135,17 @@ class ProfileService implements ProfileServiceInterface
                 'password'  => $user->hint,
                 'email'     => $user->email
             ];
-	
+    
+            Mail::to($user->email)->send(new ResetPassword($user));
+
+            /*
             Mail::send('resetmail', $data, 
                 function ($message) {
                     $message->to('asumalbag@yondu.com')
                         ->subject('iDISCIPLE APP');
                 }
             );
+            */
             //$this->sendMail->handle($user);
 
             $response = [
