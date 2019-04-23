@@ -16,8 +16,13 @@ use App\Http\Controllers\Controller;
 use App\Contracts\ResponseFormatterInterface;
 
 use App\Modules\User\Profile\Contracts\ProfileServiceInterface;
+
 use App\Modules\User\Profile\Contracts\ProfileRequestParserInterface;
+
 use App\Modules\User\Profile\Contracts\ProfileResponseParserInterface;
+
+use App\Modules\User\Profile\Services\ProfilePhotoService;
+
 
 class UserProfileController extends Controller
 {
@@ -32,9 +37,12 @@ class UserProfileController extends Controller
 
     protected $service;
 
+    protected $photoService;
+
     public function __construct(
         ResponseFormatterInterface $responseFormatter,
         ProfileServiceInterface $service,
+        ProfilePhotoService $photoService,
         ProfileRequestParserInterface $request,
         ProfileResponseParserInterface $response
     )
@@ -43,6 +51,7 @@ class UserProfileController extends Controller
         $this->service              = $service;
         $this->requestParser        = $request;
         $this->responseParser       = $response;
+        $this->photoService         = $photoService;
     }
 
     public function addUser(Request $request)
@@ -175,6 +184,23 @@ class UserProfileController extends Controller
             $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($parsedParam['message']);
         }
 
+        return Response::json($this->response, $this->response['code']);
+    }
+
+    public function managePhoto(Request $request)
+    {
+        if (null !== $request->get('base64_image') && null !== $request->get('filename')) {
+            $profile = $this->photoService->handle($request->get('base64_image'), $request->get('filename'));
+            if ($profile['status'] == 1) {
+                $this->response = $this->responseFormatter->prepareSuccessResponseBody($profile['data']);
+            } else {
+                // error saving resource
+                $this->response = $this->responseFormatter->prepareErrorResponseBody($profile['message']);
+            }
+        } else {
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody('Missing input');
+        }
+        
         return Response::json($this->response, $this->response['code']);
     }
 

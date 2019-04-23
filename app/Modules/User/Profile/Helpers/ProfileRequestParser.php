@@ -107,7 +107,8 @@ class ProfileRequestParser implements ProfileRequestParserInterface
                 'room_number'       => $request->get('room_number'),
                 'img_name'          => $request->get('img_name'),
                 'img_path'          => $request->get('img_path'),
-                'created_at'        => $this->current_date
+                'created_at'        => $this->current_date.
+                'updated_at'        => $this->current_date
             ];
 
             $user_param = [
@@ -116,7 +117,8 @@ class ProfileRequestParser implements ProfileRequestParserInterface
                 'password'      => $this->temp_password,
                 'temp_password' => Hash::make($this->temp_password),
                 'is_active'     => 1,
-                'created_at'    => $this->current_date
+                'created_at'    => $this->current_date,
+                'updated_at'    => $this->current_date
             ];
 
             $param = [

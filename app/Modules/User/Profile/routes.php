@@ -16,4 +16,6 @@ Route::group(['namespace' => 'App\Modules\User\Profile\Controllers', 'prefix' =>
 
     Route::get('/migrate', 'UserProfileController@createUserAccount');
 
+    Route::post('/photo', 'UserProfileController@managePhoto');
+
 });
