@@ -9,6 +9,8 @@ namespace App\Modules\User\Profile\Services;
 
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Hash;
+
 use App\Modules\User\Profile\Models\User;
 
 use App\Modules\User\Profile\Models\UserProfile;
@@ -214,6 +216,63 @@ class ProfileService implements ProfileServiceInterface
                 $response = [
                     'status'    => 3,
                     'message'   => 'User not found'
+                ];
+            }
+
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $response = [
+                'status'    => 3,
+                'message'   => $ex->getMessage()
+            ];
+        }
+
+        return $response;
+    }
+
+    public function createUserAccounts() {
+        $response = [];
+
+        try {
+            // update profile
+            $update = $this->profileObject::whereUser_id(0)->get();
+            if ($update) {
+                // insert new user profile
+                foreach ($update as $val) {
+                    $name = $val->firstname.' '.$val->lastname;
+                    $temp_pwd = substr(md5($name), -6, 6);
+                    $user_param = [
+                        'name'          => $name,
+                        'email'         => $val->email,
+                        'password'      => Hash::make($temp_pwd),
+                        'temp_password' => Hash::make($temp_pwd),
+                        'hint'          => $temp_pwd,
+                        'is_active'     => 1,
+                        'first_time_user'   => 1,
+                        'created_at'    => $this->currentDate,
+                        'updated_at'    => $this->currentDate
+                    ];
+
+                    $user_id = 999999;
+                    // check if there is an existing email recorded
+                    $existing = $this->userObject::where('email', $val->email)->first();
+                    if (!$existing) {
+                        // insert new user account
+                        $new_user = $this->userObject::create($user_param);
+                        $user_id = $new_user->user_id;
+                    }
+
+                    // update user id in profile page
+                    $this->profileObject::where('registration_no', $val->registration_no)
+                        ->update(['user_id' => $user_id, 'updated_at' => $this->currentDate]);
+                }
+
+                $response = [
+                    'status'    => 1
+                ];
+            } else {
+                $response = [
+                    'status'    => 3,
+                    'message'   => 'No user needs to be migrated'
                 ];
             }
 

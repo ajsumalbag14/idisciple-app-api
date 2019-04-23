@@ -39,7 +39,7 @@ class User extends Model
         'name', 'email', 'password', 'temp_password', 
         'token', 'token_expiry', 'fcm_token', 'is_active', 
         'first_time_user', 'created_at', 'updated_at',
-        'login_datetime', 'logout_datetime'
+        'login_datetime', 'logout_datetime','hint'
     ];
 
     /**
@@ -48,7 +48,7 @@ class User extends Model
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password', 'temp_password'
     ];
 
 }

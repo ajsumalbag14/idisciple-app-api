@@ -165,4 +165,20 @@ class UserProfileController extends Controller
         return Response::json($this->response, $this->response['code']);
     }
 
+    public function createUserAccount()
+    {
+        $parsedParam = $this->service->createUserAccounts();
+        if ($parsedParam['status'] == 1) {
+            $this->response = [
+                'code'      => 200,
+                'status'    => 'Success',
+                'message'   => 'Migration successful'
+            ];
+        } else {
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($parsedParam['message']);
+        }
+
+        return Response::json($this->response, $this->response['code']);
+    }
+
 }

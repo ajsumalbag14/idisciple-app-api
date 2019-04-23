@@ -34,7 +34,7 @@ class ProfileRequestParser implements ProfileRequestParserInterface
     public function __construct(RequestValidatorInterface $validator)
     {
         $this->validator        = $validator;
-        $this->temp_password    = str_random(20); // 20 alpha numeric characters
+        $this->temp_password    = str_random(6); // 20 alpha numeric characters
         $this->current_date     = Carbon::now();
     }
 
@@ -143,7 +143,7 @@ class ProfileRequestParser implements ProfileRequestParserInterface
             // prepare resource parameters to be sent to database
             $param = [
                 'password'          => Hash::make($request->get('new_password')),
-                'first_time_user'   => 1,
+                'first_time_user'   => 0,
                 'temp_password'     => null,
                 'updated_at'        => $this->current_date
             ];
@@ -166,9 +166,9 @@ class ProfileRequestParser implements ProfileRequestParserInterface
         } else {
             // prepare resource parameters to be sent to database
             $param = [
-                'password'          => $this->temp_password,
+                'hint'              => $this->temp_password,
                 'first_time_user'   => 0,
-                'temp_password'     => Hash::make($this->temp_password),
+                'password'          => Hash::make($this->temp_password),
                 'updated_at'        => $this->current_date
             ];
         }

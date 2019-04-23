@@ -14,4 +14,6 @@ Route::group(['namespace' => 'App\Modules\User\Profile\Controllers', 'prefix' =>
 
     Route::get('/logout', 'UserProfileController@logout');
 
+    Route::get('/migrate', 'UserProfileController@createUserAccount');
+
 });

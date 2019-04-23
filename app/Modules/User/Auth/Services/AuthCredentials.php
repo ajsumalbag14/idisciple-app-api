@@ -44,7 +44,7 @@ class AuthCredentials implements AuthCredentialsInterface
         $user = $this->userObject->whereEmail($request->get('email'))->first();
         if ($user) {
             // check if user is first time user
-            if ($user->first_time_user == 0) {
+            if ($user->first_time_user == 1) {
                 if (Hash::check($request->get('password'), $user->temp_password)) {
                     $proceed = 1;
                 } 
