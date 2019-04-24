@@ -138,15 +138,8 @@ class ProfileService implements ProfileServiceInterface
     
             Mail::to($user->email)->send(new ResetPassword($user));
 
-            /*
-            Mail::send('resetmail', $data, 
-                function ($message) {
-                    $message->to('asumalbag@yondu.com')
-                        ->subject('iDISCIPLE APP');
-                }
-            );
-            */
-            //$this->sendMail->handle($user);
+            // Mail gun service
+            // $this->sendMail->handle($user);
 
             $response = [
                 'status'    => 1,

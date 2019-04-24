@@ -15,14 +15,13 @@ use App\Http\Controllers\Controller;
 
 use App\Contracts\ResponseFormatterInterface;
 
+use App\Modules\User\Profile\Services\ProfilePhotoService;
+
 use App\Modules\User\Profile\Contracts\ProfileServiceInterface;
 
 use App\Modules\User\Profile\Contracts\ProfileRequestParserInterface;
 
 use App\Modules\User\Profile\Contracts\ProfileResponseParserInterface;
-
-use App\Modules\User\Profile\Services\ProfilePhotoService;
-
 
 class UserProfileController extends Controller
 {
@@ -39,6 +38,11 @@ class UserProfileController extends Controller
 
     protected $photoService;
 
+    /**
+     * Init services
+     * 
+     * @return void
+     */
     public function __construct(
         ResponseFormatterInterface $responseFormatter,
         ProfileServiceInterface $service,

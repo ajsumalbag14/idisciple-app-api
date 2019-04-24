@@ -107,7 +107,7 @@ class ProfileRequestParser implements ProfileRequestParserInterface
                 'room_number'       => $request->get('room_number'),
                 'img_name'          => $request->get('img_name'),
                 'img_path'          => $request->get('img_path'),
-                'created_at'        => $this->current_date.
+                'created_at'        => $this->current_date,
                 'updated_at'        => $this->current_date
             ];
 
