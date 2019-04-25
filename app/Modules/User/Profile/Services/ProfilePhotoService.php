@@ -9,7 +9,13 @@ namespace App\Modules\User\Profile\Services;
 
 use Image;
 
+use Carbon\Carbon;
+
+use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Storage;
+
+use App\Modules\User\Profile\Models\UserProfile;
 
 /**
  * Generate photo upload
@@ -18,9 +24,19 @@ use Illuminate\Support\Facades\Storage;
  */
 class ProfilePhotoService
 {
+    protected $currentDate;
+
+    protected $repoUserProfile;
+
+    /**
+     * Init services and database connection
+     * 
+     * @return void
+     */
     public function __construct()
     {
-        //
+        $this->currentDate      = Carbon::now();
+        $this->repoUserProfile  = new UserProfile;
     }
 
     /**
@@ -28,22 +44,39 @@ class ProfilePhotoService
      * 
      * @return array
      */
-    public function handle($base64Img, $fileName)
+    public function handle(Request $request)
     {
         $response = [];
 
         // write file
-        $writer = $this->_writeToFile($base64Img, $fileName);
+        $writer = $this->_writeToFile($request->get('base64_image'), $request->get('filename'));
 
         if ($writer) {
+            $path = ENV('AVATAR_DOWNLOAD_PATH');
+            $filename = $request->get('filename');
 
-            // save to database
+            // update to database
+            $userProfile = $this->repoUserProfile::where('user_id', $request->get('user_id'))->first();
+            if ($userProfile) {
+                $userProfile->update(
+                    [
+                        'updated_at'    => $this->currentDate,
+                        'img_name'      => $filename,
+                        'img_path'      => $path.$filename
+                    ]
+                );
+            }
+
+            $newUserProfile = $this->repoUserProfile::where('user_id', $request->get('user_id'))->first();
 
             $response = [
                 'status'    => 1,
                 'data'      => [
-                    'path'      => public_path().'\avatar',
-                    'filename'  => $fileName
+                    'user_profile_id'   => $newUserProfile->user_profile_id,
+                    'user_id'           => $newUserProfile->user_id,
+                    'name'              => $newUserProfile->firstname.' '.$newUserProfile->lastname,
+                    'profile_picture'   => $newUserProfile->img_path,
+                    'updated_at'        => $newUserProfile->updated_at
                 ]
             ];
         } else {
