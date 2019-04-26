@@ -71,13 +71,7 @@ class ProfilePhotoService
 
             $response = [
                 'status'    => 1,
-                'data'      => [
-                    'user_profile_id'   => $newUserProfile->user_profile_id,
-                    'user_id'           => $newUserProfile->user_id,
-                    'name'              => $newUserProfile->firstname.' '.$newUserProfile->lastname,
-                    'profile_picture'   => $newUserProfile->img_path,
-                    'updated_at'        => $newUserProfile->updated_at
-                ]
+                'data'      => $newUserProfile->toArray()
             ];
         } else {
             $response = [
