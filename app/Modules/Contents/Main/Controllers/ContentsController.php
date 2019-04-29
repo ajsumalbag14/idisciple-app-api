@@ -41,6 +41,10 @@ class ContentsController extends Controller
                 'countries'   => [
                     'update_now'        => false,
                     'path_file'         => ENV('ASSETS_URL').'/countries.json'
+                ],
+                'resources'   => [
+                    'update_now'        => false,
+                    'path_file'         => ENV('ASSETS_URL').'/resources.json'
                 ]
             ]
         ];
