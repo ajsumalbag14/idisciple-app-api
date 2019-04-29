@@ -193,7 +193,7 @@ class UserProfileController extends Controller
 
     public function managePhoto(Request $request)
     {
-        if (null !== $request->get('user_id') && null !== $request->get('base64_image') && null !== $request->get('filename')) {
+        if (null !== $request->get('user_id') && null !== $request->file) {
             $profile = $this->photoService->handle($request);
             if ($profile['status'] == 1) {
                 $this->response = $this->responseFormatter->prepareSuccessResponseBody($profile['data']);

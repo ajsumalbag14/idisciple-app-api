@@ -48,19 +48,16 @@ class ProfilePhotoService
     {
         $response = [];
 
-        $path = ENV('AVATAR_DOWNLOAD_PATH');
-        $filename = $request->file->getClientOriginalName();
+        // write file
+        $writer = $this->_writeToFile($request->get('base64_image'), $request->get('filename'));
 
-        // get user record
-        $userProfile = $this->repoUserProfile::where('user_id', $request->get('user_id'))->first();
-
-        if ($userProfile) {
-            // save image to directory
-            $request->file->storeAs('public/avatar', $request->file->getClientOriginalName());
-            
+        if ($writer) {
+            $path = ENV('AVATAR_DOWNLOAD_PATH');
+            $filename = $request->get('filename');
 
             // update to database
-            if ($userProfile) {        
+            $userProfile = $this->repoUserProfile::where('user_id', $request->get('user_id'))->first();
+            if ($userProfile) {
                 $userProfile->update(
                     [
                         'updated_at'    => $this->currentDate,
@@ -78,13 +75,12 @@ class ProfilePhotoService
             ];
         } else {
             $response = [
-                'status'    => 2,
-                'message'   => 'User not found'
+                'status'    => 3,
+                'message'   => 'Image processing error'
             ];
         }
 
         return $response;
-        
     }
 
     /**
