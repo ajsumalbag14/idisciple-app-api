@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Storage;
 
+use Symfony\Component\HttpFoundation\Request as RequestApi; 
+
 use App\Modules\User\Profile\Models\UserProfile;
 
 /**
@@ -49,14 +51,14 @@ class ProfilePhotoService
         $response = [];
 
         $path = ENV('AVATAR_DOWNLOAD_PATH');
-        $filename = $request->file->getClientOriginalName();
+        $filename = $request->get('user_id').'_'.$request->file->getClientOriginalName();
 
         // get user record
         $userProfile = $this->repoUserProfile::where('user_id', $request->get('user_id'))->first();
 
         if ($userProfile) {
             // save image to directory
-            $request->file->storeAs('public/avatar', $request->file->getClientOriginalName());
+            $request->file->storeAs('public/avatar', $filename);
             
 
             // update to database
@@ -69,6 +71,9 @@ class ProfilePhotoService
                     ]
                 );
             }
+
+            // update assets json
+            self::_updateAssetsJson();
 
             $newUserProfile = $this->repoUserProfile::where('user_id', $request->get('user_id'))->first();
 
@@ -100,5 +105,14 @@ class ProfilePhotoService
         $writer = Storage::disk('public')->put('avatar/'.$fileName, $profileImg);
 
         return $writer;
+    }
+
+    private function _updateAssetsJson() {
+        // Create your request to your API
+        $request = RequestApi::create('/user/all', 'GET');
+        // Dispatch your request instance with the router
+        app()->handle($request);
+
+        \Log::info('Trigger assets update');
     }
 }

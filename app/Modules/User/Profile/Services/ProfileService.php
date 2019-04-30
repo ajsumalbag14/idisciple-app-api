@@ -23,6 +23,8 @@ use App\Modules\User\Profile\Services\SendMailService;
 
 use App\Modules\User\Profile\Contracts\ProfileServiceInterface;
 
+use Symfony\Component\HttpFoundation\Request as RequestApi; 
+
 class ProfileService implements ProfileServiceInterface
 {
     protected $userObject;
@@ -64,6 +66,9 @@ class ProfileService implements ProfileServiceInterface
                 
                 // create profile
                 $profile = $this->profileObject::create($profile_param);
+
+                // update assets json
+                self::_updateAssetsJson();
                 
                 $response = [
                     'status'    => 1,
@@ -190,6 +195,9 @@ class ProfileService implements ProfileServiceInterface
             $update = $this->profileObject::whereUser_id($user_id)->update($array['profile']);
 
             if ($update) {
+                // update assets json
+                self::_updateAssetsJson();
+
                 // retrieve updated account
                 $profile = $this->profileObject::whereUser_id($user_id)->first();
 
@@ -287,6 +295,9 @@ class ProfileService implements ProfileServiceInterface
                         ->update(['user_id' => $user_id, 'updated_at' => $this->currentDate]);
                 }
 
+                // update assets json
+                self::_updateAssetsJson();
+
                 $response = [
                     'status'    => 1
                 ];
@@ -305,5 +316,14 @@ class ProfileService implements ProfileServiceInterface
         }
 
         return $response;
+    }
+
+    private function _updateAssetsJson() {
+        // Create your request to your API
+        $request = RequestApi::create('/user/all', 'GET');
+        // Dispatch your request instance with the router
+        app()->handle($request);
+
+        \Log::info('Trigger assets update');
     }
 }
