@@ -82,7 +82,21 @@ class ProfilePhotoService
 
             $response = [
                 'status'    => 1,
-                'data'      => $newUserProfile->toArray()
+                'data'      => [
+                    'id'                => $newUserProfile->user_id,
+                    'name'              => $newUserProfile->firstname.' '.$newUserProfile->lastname,
+                    'nickname'          => $newUserProfile->nickname,
+                    'firstname'         => $newUserProfile->firstname,
+                    'middlename'        => $newUserProfile->middlename,
+                    'lastname'          => $newUserProfile->lastname,
+                    'gender'            => $newUserProfile->gender,
+                    'country'           => $newUserProfile->country,
+                    'fg_id'             => $newUserProfile->family_group_id,
+                    'workshop_number_1' => $newUserProfile->workshop_id_1,
+                    'workshop_number_2' => $newUserProfile->workshop_id_2,
+                    'img_path'          => $newUserProfile->img_path,
+                    'img_name'          => $newUserProfile->img_name
+                ]
             ];
         } else {
             $response = [
