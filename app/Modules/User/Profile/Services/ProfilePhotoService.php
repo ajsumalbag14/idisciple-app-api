@@ -30,6 +30,8 @@ class ProfilePhotoService
 
     protected $repoUserProfile;
 
+    protected $randString;
+
     /**
      * Init services and database connection
      * 
@@ -39,6 +41,7 @@ class ProfilePhotoService
     {
         $this->currentDate      = Carbon::now();
         $this->repoUserProfile  = new UserProfile;
+        $this->randString       = str_random(6);
     }
 
     /**
@@ -51,7 +54,7 @@ class ProfilePhotoService
         $response = [];
 
         $path = ENV('AVATAR_DOWNLOAD_PATH');
-        $filename = $request->get('user_id').'_'.$request->file->getClientOriginalName();
+        $filename = $request->get('user_id').'_'.$this->randString.'_'.$request->file->getClientOriginalName();
 
         // get user record
         $userProfile = $this->repoUserProfile::where('user_id', $request->get('user_id'))->first();
