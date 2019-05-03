@@ -12,6 +12,8 @@ Route::group(['namespace' => 'App\Modules\User\Profile\Controllers', 'prefix' =>
 
     Route::get('/all', 'UserProfileController@fetchAll');
 
+    Route::get('/show', 'UserProfileController@fetchUser');
+
     Route::get('/logout', 'UserProfileController@logout');
 
     Route::get('/migrate', 'UserProfileController@createUserAccount');

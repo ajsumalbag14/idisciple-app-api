@@ -186,6 +186,37 @@ class ProfileService implements ProfileServiceInterface
         return $response;
     }
 
+    public function getUser($user_id)
+    {
+        $response = [];
+
+        try {
+            // get all users
+            $profile    = $this->profileObject::where('user_id', $user_id)->first();
+            if ($profile) {
+                $response = [
+                    'status'    => 1,
+                    'data'      => [
+                        'profile'   => $profile
+                    ]
+                ];
+            } else {
+                $response = [
+                    'status'    => 2,
+                    'message'   => 'User not found'
+                ];   
+            }
+
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $response = [
+                'status'    => 3,
+                'message'   => $ex->getMessage()
+            ];
+        }
+
+        return $response;
+    }
+
     public function editUserViaUserId($array, $user_id)
     {
         $response = [];

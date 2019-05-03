@@ -138,6 +138,24 @@ class UserProfileController extends Controller
         return Response::json($this->response, $this->response['code']);
     }
 
+    public function fetchUser(Request $request)
+    {
+
+        if (null !== $request->get('user_id')) {
+            $profile = $this->service->getUser($request->get('user_id'));
+            if ($profile['status'] == 1) {
+                $this->response = $this->responseFormatter->prepareSuccessResponseBody($profile['data']);
+            } else {
+                // error saving resource
+                $this->response = $this->responseFormatter->prepareErrorResponseBody($profile['message']);
+            }
+        } else {
+            $this->response = $this->responseFormatter->prepareUnprocessedResponseBody('Missing input');
+        }
+        
+        return Response::json($this->response, $this->response['code']);
+    }
+
     public function editUser(Request $request, $user_id)
     {
         $this->requestParser->setUpdateProfileParam($request);
