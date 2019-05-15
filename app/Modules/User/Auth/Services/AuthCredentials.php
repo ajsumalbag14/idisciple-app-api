@@ -32,7 +32,7 @@ class AuthCredentials implements AuthCredentialsInterface
     public function verify(Request $request)
     {
         // token parameters
-        $token_param = [
+        $update_param = [
             'token'             => str_random(100),
             'token_expiry'      => Carbon::now()->addYear(1),
             'login_datetime'    => Carbon::now()
@@ -59,7 +59,7 @@ class AuthCredentials implements AuthCredentialsInterface
             if ($proceed == 1) {
                 $user_id = $user->user_id;
                 // create and update api/session token
-                $user->update($token_param);
+                $user->update($update_param);
                 // retrieve all assets and session values
                 $this->setSessionAssets($user_id);
 

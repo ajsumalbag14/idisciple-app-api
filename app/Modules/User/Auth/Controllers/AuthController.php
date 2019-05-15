@@ -54,7 +54,7 @@ class AuthController extends Controller
             $this->response = $this->responseFormatter->prepareUnprocessedResponseBody($authResult['message']);
         } else {
             // if login is unsuccessful
-            $this->response = $this->responseFormatter->prepareErrorResponseBody($authResult['message']);
+            $this->response = $this->responseFormatter->prepareErrorResponseBody('Something went wrong');
         }
 
         return Response::json($this->response, $this->response['code']);

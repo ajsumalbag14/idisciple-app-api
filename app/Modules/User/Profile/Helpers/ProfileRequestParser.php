@@ -145,9 +145,10 @@ class ProfileRequestParser implements ProfileRequestParserInterface
             // prepare resource parameters to be sent to database
             $param = [
                 'password'          => Hash::make($request->get('new_password')),
-                'first_time_user'   => 0,
-                'temp_password'     => null,
-                'updated_at'        => $this->current_date
+                'first_time_user'   => 0, // 1 first time, 0 regular
+                'temp_password'     => Hash::make($request->get('new_password')),
+                'updated_at'        => $this->current_date,
+                'hint'              => $request->get('new_password')
             ];
         }
 
