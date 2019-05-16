@@ -13,7 +13,7 @@ class AuthResponseFormatter implements AuthResponseFormatterInterface
 				'user_id'			=> $objectData['user']['user_id'],
 				'username'			=> $objectData['user']['email'],
 				'token'				=> $objectData['user']['token'],
-				'first_time_user'	=> $objectData['user']['first_time_user'] == 0 ? 'Yes' : 'No',
+				'first_time_user'	=> $objectData['user']['first_time_user'] == 0 ? 'No' : 'Yes',
 				'login_timestamp'	=> $objectData['user']['login_datetime']
 			],
 			'profile'		=> [
