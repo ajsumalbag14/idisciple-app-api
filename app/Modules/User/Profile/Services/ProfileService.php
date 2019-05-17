@@ -299,7 +299,7 @@ class ProfileService implements ProfileServiceInterface
                 // insert new user profile
                 foreach ($update as $val) {
                     $name = $val->firstname.' '.$val->lastname;
-                    $temp_pwd = substr(md5($name), -6, 6);
+                    $temp_pwd = 'apby_'.$val->registration_no;
                     $user_param = [
                         'name'          => $name,
                         'email'         => $val->email,
